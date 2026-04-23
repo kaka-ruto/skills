@@ -2,11 +2,9 @@
 
 A collection of specialized skills for AI agents, designed to work with opencode and similar agent systems.
 
-## Quick Start
-
 ## Installation
 
-### Option 1: Symlink (Recommended for Single User)
+### Quick Install (Recommended)
 
 ```bash
 # Clone the repository
@@ -14,41 +12,67 @@ git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
 
 # Symlink all skills
 ln -s ~/Code/kaka/skills/rubyllm ~/.agents/skills/rubyllm
-
-# Or symlink individual skills
-ln -s ~/Code/kaka/skills/rubyllm/tools ~/.agents/skills/rubyllm-tools
-ln -s ~/Code/kaka/skills/rubyllm/agents ~/.agents/skills/rubyllm-agents
 ```
 
-### Option 2: Worktree (Recommended for Contributors)
-
-Worktrees allow you to have the same branch in multiple directories.
+### Install Individual Skills
 
 ```bash
 # Clone the repository
 git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
-cd ~/Code/kaka/skills
 
-# Create a bare repo for worktrees
-git clone --bare ~/Code/kaka/skills ~/.agents/skills/rubyllm/.git
-
-# Set up worktree
-cd ~/.agents/skills/rubyllm
-git config core.worktree ~/Code/kaka/skills/rubyllm
+# Symlink only the skills you need
+ln -s ~/Code/kaka/skills/rubyllm/tools ~/.agents/skills/rubyllm-tools
+ln -s ~/Code/kaka/skills/rubyllm/agents ~/.agents/skills/rubyllm-agents
+ln -s ~/Code/kaka/skills/rubyllm/rails ~/.agents/skills/rubyllm-rails
 ```
 
-**Better approach for worktrees:**
+### Install to Custom Directory
+
+```bash
+# Clone to your preferred location
+git clone https://github.com/kaka/skills.git ~/my-skills
+
+# Symlink to your agent's skill directory
+ln -s ~/my-skills/rubyllm ~/.agents/skills/rubyllm
+```
+
+## For Contributors
+
+### Using Worktrees (Advanced)
+
+Worktrees allow you to test changes with your agent while developing:
 
 ```bash
 # Main repo (for development)
 git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
 
-# Worktree (for testing with agent)
+# Worktree (for testing with agent) - creates separate branch
 cd ~/Code/kaka/skills
-git worktree add -b rubyllm-local ~/.agents/skills/rubyllm master
+git worktree add -b testing ~/.agents/skills/rubyllm master
 ```
 
-This creates a new branch `rubyllm-local` for testing while keeping `master` clean.
+This creates a `testing` branch in `~/.agents/skills/rubyllm/` for local testing.
+
+**Workflow:**
+1. Develop in `~/Code/kaka/skills/rubyllm/` on `master`
+2. Test in `~/.agents/skills/rubyllm/` on `testing` branch
+3. Merge `testing` into `master` when ready
+4. Push to GitHub
+
+### Simple Symlink Approach
+
+For most users, symlinks are simpler:
+
+```bash
+# Development
+cd ~/Code/kaka/skills/rubyllm
+vim tools/SKILL.md
+git add .
+git commit -m "Update tools"
+
+# Test immediately (symlink makes changes instant)
+# Your agent will use the updated skill
+```
 
 ## Available Skills
 
