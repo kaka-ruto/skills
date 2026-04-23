@@ -13,24 +13,38 @@ git clone https://github.com/kaka/skills.git ~/.agents/skills/rubyllm
 
 ### Install Individual Skills
 
-```bash
-# Create directory for the skill
-mkdir -p ~/.agents/skills/rubyllm
+Use Git sparse checkout to download only specific skills:
 
-# Clone specific skill
-git clone --filter=blob:none --sparse https://github.com/kaka/skills.git ~/.agents/skills/rubyllm-temp
-cd ~/.agents/skills/rubyllm-temp
+```bash
+# Download only the tools skill
+git clone --filter=blob:none --sparse https://github.com/kaka/skills.git ~/.agents/skills/rubyllm-tools
+cd ~/.agents/skills/rubyllm-tools
 git sparse-checkout set rubyllm/tools
-mv rubyllm/tools ~/.agents/skills/rubyllm/
+git checkout master -- rubyllm/tools/*
+mv rubyllm/tools/* .
+rm -rf rubyllm
 cd ~
-rm -rf ~/.agents/skills/rubyllm-temp
 ```
 
-**Or manually copy:**
+**Multiple skills:**
+
+```bash
+# Download tools, agents, and rails
+git clone --filter=blob:none --sparse https://github.com/kaka/skills.git ~/.agents/skills/my-skills
+cd ~/.agents/skills/my-skills
+git sparse-checkout set rubyllm/tools rubyllm/agents rubyllm/rails
+git checkout master -- rubyllm/tools/* rubyllm/agents/* rubyllm/rails/*
+mv rubyllm/tools/* ~/.agents/skills/rubyllm-tools/
+mv rubyllm/agents/* ~/.agents/skills/rubyllm-agents/
+mv rubyllm/rails/* ~/.agents/skills/rubyllm-rails/
+rm -rf ~/.agents/skills/my-skills
+```
+
+**Simple approach (clone once, pick what you need):**
 
 ```bash
 # Clone to temporary location
-git clone https://github.com/kaka/skills.git /tmp/skills
+git clone --depth 1 https://github.com/kaka/skills.git /tmp/skills
 
 # Copy only the skills you need
 cp -r /tmp/skills/rubyllm/tools ~/.agents/skills/rubyllm-tools
