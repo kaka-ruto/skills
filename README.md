@@ -7,8 +7,30 @@ A collection of specialized skills for AI agents, designed to work with opencode
 ### Install All Skills
 
 ```bash
-# Clone directly to your agent's skill directory
+# Clone all skills to your agent's skill directory
+git clone https://github.com/kaka/skills.git ~/.agents/skills
+```
+
+### Install RubyLLM Skills Only
+
+```bash
+# Clone only RubyLLM skills
 git clone https://github.com/kaka/skills.git ~/.agents/skills/rubyllm
+```
+
+### Install Core Skills Only
+
+```bash
+# Clone repository
+git clone https://github.com/kaka/skills.git /tmp/skills
+
+# Copy core skills
+cp -r /tmp/skills/continuous-development ~/.agents/skills/
+cp -r /tmp/skills/continuous-improvement ~/.agents/skills/
+cp -r /tmp/skills/git-workflow ~/.agents/skills/
+
+# Clean up
+rm -rf /tmp/skills
 ```
 
 ### Install Individual Skills
@@ -51,6 +73,16 @@ git clone https://github.com/kaka/skills.git ~/my-agent-skills/rubyllm
 
 ## Available Skills
 
+### Core Agent Skills
+
+Essential skills for agent development workflow:
+
+| Skill | Description |
+|-------|-------------|
+| [continuous-development/](continuous-development/SKILL.md) | Keep development continuous, prioritized, and consistent across sessions |
+| [continuous-improvement/](continuous-improvement/SKILL.md) | Continuously improve the development system by fixing process failures |
+| [git-workflow/](git-workflow/SKILL.md) | Clean git workflow: work on master, clear commits, no prefixes |
+
 ### RubyLLM Ecosystem (v1.14.1)
 
 Comprehensive skills for building AI-powered Ruby applications:
@@ -86,13 +118,28 @@ Worktrees allow you to maintain a local copy for testing while contributing to t
 git clone https://github.com/yourusername/skills.git ~/Code/kaka/skills
 cd ~/Code/kaka/skills
 
-# 2. Create a worktree for testing with your agent
-# This creates a separate branch for local testing
-git worktree add -b local-testing ~/.agents/skills/rubyllm master
+# 2. Create worktrees for testing with your agent
+# RubyLLM skills worktree
+git worktree add -b local-rubyllm ~/.agents/skills/rubyllm master
 
-# 3. Keep main repo for development, worktree for testing
-# ~/Code/kaka/skills/        <- Development (master branch)
-# ~/.agents/skills/rubyllm/  <- Testing (local-testing branch)
+# Core skills worktree (optional - if you want to test these too)
+git worktree add -b local-core ~/.agents/skills/continuous-development master
+git worktree add -b local-core2 ~/.agents/skills/continuous-improvement master
+git worktree add -b local-core3 ~/.agents/skills/git-workflow master
+
+# 3. Keep main repo for development, worktrees for testing
+# ~/Code/kaka/skills/                    <- Development (master branch)
+# ~/.agents/skills/rubyllm/              <- Testing RubyLLM skills (local-rubyllm branch)
+# ~/.agents/skills/continuous-development/ <- Testing core skills (local-core branch)
+```
+
+**Simpler approach for core skills:**
+
+```bash
+# Just copy core skills directly (they don't change often)
+cp -r ~/Code/kaka/skills/continuous-development ~/.agents/skills/
+cp -r ~/Code/kaka/skills/continuous-improvement ~/.agents/skills/
+cp -r ~/Code/kaka/skills/git-workflow ~/.agents/skills/
 ```
 
 #### Workflow
@@ -186,6 +233,9 @@ git worktree prune
 ├── .gitignore
 ├── LICENSE
 ├── README.md
+├── continuous-development/       # Core skill: continuous development workflow
+├── continuous-improvement/       # Core skill: continuous improvement process
+├── git-workflow/                 # Core skill: clean git workflow
 └── rubyllm/                      # All RubyLLM skills
     ├── SKILL.md
     ├── tools/
@@ -193,12 +243,16 @@ git worktree prune
     ├── rails/
     └── ...
 
-~/.agents/skills/rubyllm/        # Worktree for testing
-├── .git                          # Worktree git file
-├── SKILL.md
-├── tools/
-├── agents/
-└── ...
+~/.agents/skills/                # Agent's skill directory (worktrees or copies)
+├── continuous-development/       # Worktree or copy
+├── continuous-improvement/       # Worktree or copy
+├── git-workflow/                 # Worktree or copy
+└── rubyllm/                      # Worktree for RubyLLM skills
+    ├── .git                       # Worktree git file
+    ├── SKILL.md
+    ├── tools/
+    ├── agents/
+    └── ...
 ```
 
 ## Updating Skills
