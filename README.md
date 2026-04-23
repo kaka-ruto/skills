@@ -4,74 +4,47 @@ A collection of specialized skills for AI agents, designed to work with opencode
 
 ## Installation
 
-### Quick Install (Recommended)
+### Install All Skills
 
 ```bash
-# Clone the repository
-git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
-
-# Symlink all skills
-ln -s ~/Code/kaka/skills/rubyllm ~/.agents/skills/rubyllm
+# Clone directly to your agent's skill directory
+git clone https://github.com/kaka/skills.git ~/.agents/skills/rubyllm
 ```
 
 ### Install Individual Skills
 
 ```bash
-# Clone the repository
-git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
+# Create directory for the skill
+mkdir -p ~/.agents/skills/rubyllm
 
-# Symlink only the skills you need
-ln -s ~/Code/kaka/skills/rubyllm/tools ~/.agents/skills/rubyllm-tools
-ln -s ~/Code/kaka/skills/rubyllm/agents ~/.agents/skills/rubyllm-agents
-ln -s ~/Code/kaka/skills/rubyllm/rails ~/.agents/skills/rubyllm-rails
+# Clone specific skill
+git clone --filter=blob:none --sparse https://github.com/kaka/skills.git ~/.agents/skills/rubyllm-temp
+cd ~/.agents/skills/rubyllm-temp
+git sparse-checkout set rubyllm/tools
+mv rubyllm/tools ~/.agents/skills/rubyllm/
+cd ~
+rm -rf ~/.agents/skills/rubyllm-temp
+```
+
+**Or manually copy:**
+
+```bash
+# Clone to temporary location
+git clone https://github.com/kaka/skills.git /tmp/skills
+
+# Copy only the skills you need
+cp -r /tmp/skills/rubyllm/tools ~/.agents/skills/rubyllm-tools
+cp -r /tmp/skills/rubyllm/agents ~/.agents/skills/rubyllm-agents
+
+# Clean up
+rm -rf /tmp/skills
 ```
 
 ### Install to Custom Directory
 
 ```bash
-# Clone to your preferred location
-git clone https://github.com/kaka/skills.git ~/my-skills
-
-# Symlink to your agent's skill directory
-ln -s ~/my-skills/rubyllm ~/.agents/skills/rubyllm
-```
-
-## For Contributors
-
-### Using Worktrees (Advanced)
-
-Worktrees allow you to test changes with your agent while developing:
-
-```bash
-# Main repo (for development)
-git clone https://github.com/kaka/skills.git ~/Code/kaka/skills
-
-# Worktree (for testing with agent) - creates separate branch
-cd ~/Code/kaka/skills
-git worktree add -b testing ~/.agents/skills/rubyllm master
-```
-
-This creates a `testing` branch in `~/.agents/skills/rubyllm/` for local testing.
-
-**Workflow:**
-1. Develop in `~/Code/kaka/skills/rubyllm/` on `master`
-2. Test in `~/.agents/skills/rubyllm/` on `testing` branch
-3. Merge `testing` into `master` when ready
-4. Push to GitHub
-
-### Simple Symlink Approach
-
-For most users, symlinks are simpler:
-
-```bash
-# Development
-cd ~/Code/kaka/skills/rubyllm
-vim tools/SKILL.md
-git add .
-git commit -m "Update tools"
-
-# Test immediately (symlink makes changes instant)
-# Your agent will use the updated skill
+# Clone to any directory your agent uses
+git clone https://github.com/kaka/skills.git ~/my-agent-skills/rubyllm
 ```
 
 ## Available Skills
@@ -82,59 +55,79 @@ Comprehensive skills for building AI-powered Ruby applications:
 
 | Skill | Version | Description |
 |-------|---------|-------------|
-| [rubyllm](rubyllm/SKILL.md) | 1.14.1 | Main RubyLLM API - chat, providers, configuration |
-| [rubyllm/tools](rubyllm/tools/SKILL.md) | - | Function calling, tool creation, security |
-| [rubyllm/agents](rubyllm/agents/SKILL.md) | - | Class-based agents, runtime context |
-| [rubyllm/rails](rubyllm/rails/SKILL.md) | - | Rails integration, Hotwire, ActiveRecord |
-| [rubyllm/embeddings](rubyllm/embeddings/SKILL.md) | - | Vector generation, semantic search, RAG |
-| [rubyllm/image-generation](rubyllm/image-generation/SKILL.md) | - | DALL-E 3, image editing, masks |
-| [rubyllm/audio-transcription](rubyllm/audio-transcription/SKILL.md) | - | Whisper, diarization, timestamps |
-| [rubyllm/moderation](rubyllm/moderation/SKILL.md) | - | Content safety, thresholds |
-| [rubyllm/schema](rubyllm/schema/SKILL.md) | 0.3.0 | JSON Schema DSL |
-| [rubyllm/mcp](rubyllm/mcp/SKILL.md) | 1.0.0 | Model Context Protocol |
-| [rubyllm/instrumentation](rubyllm/instrumentation/SKILL.md) | 0.3.1 | ActiveSupport notifications |
-| [rubyllm/monitoring](rubyllm/monitoring/SKILL.md) | 0.3.2 | Dashboards & alerts |
-| [rubyllm/red_candle](rubyllm/red_candle/SKILL.md) | 0.2.0 | Local LLM execution |
-| [rubyllm/tribunal](rubyllm/tribunal/SKILL.md) | 0.1.1 | LLM testing & evaluation |
-| [rubyllm/opentelemetry](rubyllm/opentelemetry/SKILL.md) | 0.4.0 | OpenTelemetry tracing |
+| [SKILL.md](SKILL.md) | 1.14.1 | Main RubyLLM API - chat, providers, configuration |
+| [tools/](tools/SKILL.md) | - | Function calling, tool creation, security |
+| [agents/](agents/SKILL.md) | - | Class-based agents, runtime context |
+| [rails/](rails/SKILL.md) | - | Rails integration, Hotwire, ActiveRecord |
+| [embeddings/](embeddings/SKILL.md) | - | Vector generation, semantic search, RAG |
+| [image-generation/](image-generation/SKILL.md) | - | DALL-E 3, image editing, masks |
+| [audio-transcription/](audio-transcription/SKILL.md) | - | Whisper, diarization, timestamps |
+| [moderation/](moderation/SKILL.md) | - | Content safety, thresholds |
+| [schema/](schema/SKILL.md) | 0.3.0 | JSON Schema DSL |
+| [mcp/](mcp/SKILL.md) | 1.0.0 | Model Context Protocol |
+| [instrumentation/](instrumentation/SKILL.md) | 0.3.1 | ActiveSupport notifications |
+| [monitoring/](monitoring/SKILL.md) | 0.3.2 | Dashboards & alerts |
+| [red_candle/](red_candle/SKILL.md) | 0.2.0 | Local LLM execution |
+| [tribunal/](tribunal/SKILL.md) | 0.1.1 | LLM testing & evaluation |
+| [opentelemetry/](opentelemetry/SKILL.md) | 0.4.0 | OpenTelemetry tracing |
 
 ## For Contributors
 
-### Setting Up Worktrees
+### Using Git Worktrees
 
-Worktrees allow you to work on the public repo while testing locally:
+Worktrees allow you to maintain a local copy for testing while contributing to the main repository.
+
+#### Setup
 
 ```bash
-# 1. Fork and clone
-git clone https://github.com/yourusername/cafaye.git ~/Code/kaka/skills
+# 1. Fork the repository on GitHub, then clone your fork
+git clone https://github.com/yourusername/skills.git ~/Code/kaka/skills
 cd ~/Code/kaka/skills
 
-# 2. Create worktree for local agent use
-git worktree add ~/.agents/skills/rubyllm rubyllm
+# 2. Create a worktree for testing with your agent
+# This creates a separate branch for local testing
+git worktree add -b local-testing ~/.agents/skills/rubyllm master
 
-# 3. Make changes in either location
-# Both point to the same git repository!
-vim ~/Code/kaka/skills/rubyllm/tools/SKILL.md
-
-# 4. Test with your agent
-# The agent will use ~/.agents/skills/rubyllm/
-
-# 5. Commit and push
-cd ~/Code/kaka/skills/rubyllm
-git add .
-git commit -m "Update tools skill"
-git push
+# 3. Keep main repo for development, worktree for testing
+# ~/Code/kaka/skills/        <- Development (master branch)
+# ~/.agents/skills/rubyllm/  <- Testing (local-testing branch)
 ```
 
-### Why Worktrees?
+#### Workflow
 
-- **Single source of truth**: One git repo, two working directories
-- **Instant sync**: Changes in either location are immediately available
-- **Test locally**: Test with your agent before pushing
-- **Clean workflow**: Standard git commands work in both locations
-- **Flexible**: Can have different branches checked out in each worktree
+```bash
+# Make changes in your development directory
+cd ~/Code/kaka/skills/rubyllm
+vim tools/SKILL.md
 
-### Worktree Commands
+# Test with your agent (worktree has the changes)
+# Your agent uses ~/.agents/skills/rubyllm/
+
+# When ready, commit in development directory
+cd ~/Code/kaka/skills
+git add rubyllm/tools/SKILL.md
+git commit -m "Improve tools documentation"
+
+# Sync to worktree for more testing
+git worktree list  # Verify worktree is up to date
+
+# Push to your fork
+git push origin master
+
+# Open a pull request on GitHub
+```
+
+#### Merging Test Branch Back to Master
+
+```bash
+# After testing in worktree, merge changes back
+cd ~/Code/kaka/skills
+git checkout master
+git merge local-testing
+git push origin master
+```
+
+#### Worktree Commands
 
 ```bash
 # List all worktrees
@@ -146,64 +139,87 @@ git worktree add <path> <branch>
 # Remove a worktree
 git worktree remove <path>
 
-# Prune stale worktrees
+# Clean up stale worktrees
 git worktree prune
 ```
 
-### Contribution Workflow
+### Why Worktrees?
 
-1. **Fork the repository** on GitHub
-2. **Clone your fork** locally
+- **True separation**: Development and testing environments are independent
+- **No symlinks**: Each directory is a proper git working tree
+- **Branch flexibility**: Test on separate branches without affecting main development
+- **Clean workflow**: Standard git commands work in both locations
+- **Agent compatibility**: Works naturally with agent systems that expect skills in `~/.agents/skills/`
+
+### Contribution Guidelines
+
+1. **Fork** the repository on GitHub
+2. **Clone** your fork locally
 3. **Create a worktree** for testing:
    ```bash
-   git worktree add ~/.agents/skills/rubyllm rubyllm
+   git worktree add -b testing ~/.agents/skills/rubyllm master
    ```
-4. **Make your changes** in either location
-5. **Test with your agent** to ensure it works
-6. **Commit with a clear message**:
+4. **Make changes** in your development directory
+5. **Test** with your agent using the worktree
+6. **Commit** with clear messages:
    ```bash
    git add .
    git commit -m "Add new feature to tools skill"
    ```
-7. **Push to your fork**:
-   ```bash
-   git push origin master
-   ```
-8. **Open a Pull Request** on GitHub
+7. **Push** to your fork
+8. **Open a Pull Request**
 
 ### Commit Guidelines
 
 - One commit per completed feature/fix
-- Short, clear commit messages (no prefixes like `feat:`, `chore:`)
+- Short, clear commit messages (no `feat:`, `chore:` prefixes)
 - Test before committing
-- Never use `git add .` - stage specific files
+- Stage specific files: `git add <file>` (never `git add .`)
 
 ## Directory Structure
 
 ```
-~/Code/kaka/skills/           # Public repository
-├── .git/                      # Git repository
-├── rubyllm/                   # RubyLLM skills
-│   ├── SKILL.md              # Main skill
-│   ├── tools/
-│   ├── agents/
-│   ├── rails/
-│   ├── embeddings/
-│   ├── image-generation/
-│   ├── audio-transcription/
-│   ├── moderation/
-│   ├── schema/
-│   ├── mcp/
-│   ├── instrumentation/
-│   ├── monitoring/
-│   ├── red_candle/
-│   ├── tribunal/
-│   └── opentelemetry/
-└── .repos/                    # Local source repos (not committed)
-    └── ruby_llm/              # Cloned gem repos for reference
+~/Code/kaka/skills/              # Development repository
+├── .git/                         # Git repository
+├── .gitignore
+├── LICENSE
+├── README.md
+└── rubyllm/                      # All RubyLLM skills
+    ├── SKILL.md
+    ├── tools/
+    ├── agents/
+    ├── rails/
+    └── ...
 
-~/.agents/skills/             # Local agent directory
-└── rubyllm/                  # Symlink or worktree → ~/Code/kaka/skills/rubyllm
+~/.agents/skills/rubyllm/        # Worktree for testing
+├── .git                          # Worktree git file
+├── SKILL.md
+├── tools/
+├── agents/
+└── ...
+```
+
+## Updating Skills
+
+### For Users
+
+```bash
+# If you cloned directly to ~/.agents/skills/rubyllm
+cd ~/.agents/skills/rubyllm
+git pull origin master
+```
+
+### For Contributors
+
+```bash
+# Pull latest changes to development repo
+cd ~/Code/kaka/skills
+git pull origin master
+
+# Worktree automatically stays in sync
+# Or manually update:
+cd ~/.agents/skills/rubyllm
+git pull
 ```
 
 ## Adding New Skills
@@ -212,7 +228,7 @@ When adding a new skill:
 
 1. **Create the skill directory**:
    ```bash
-   mkdir ~/Code/kaka/skills/newskill
+   mkdir ~/Code/kaka/skills/rubyllm/newskill
    ```
 
 2. **Create SKILL.md** with frontmatter:
@@ -231,49 +247,21 @@ When adding a new skill:
    Documentation...
    ```
 
-3. **Update this README** to include the new skill
+3. **Update README.md** to include the new skill in the table
 
-4. **Test locally** via the symlink/worktree
+4. **Test locally** using your worktree
 
-5. **Commit and push**
-
-## Symlink vs Worktree
-
-### Symlink (Simpler)
-```bash
-ln -s ~/Code/kaka/skills/rubyllm ~/.agents/skills/rubyllm
-```
-- ✅ Simple to understand
-- ✅ Instant sync
-- ❌ Can be tricky on some systems
-- ❌ Doesn't support different branches
-
-### Worktree (More Powerful)
-```bash
-git worktree add ~/.agents/skills/rubyllm rubyllm
-```
-- ✅ Full git functionality in both locations
-- ✅ Can have different branches
-- ✅ Better for complex workflows
-- ❌ Slightly more complex setup
-
-**Recommendation**: Use symlinks for simple setups, worktrees for advanced workflows.
+5. **Commit and push**:
+   ```bash
+   cd ~/Code/kaka/skills
+   git add rubyllm/newskill
+   git commit -m "Add newskill"
+   git push
+   ```
 
 ## License
 
 MIT License - see LICENSE file
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a worktree for testing
-3. Make your changes
-4. Test with your agent
-5. Submit a pull request
-
-See the "For Contributors" section above for detailed instructions.
 
 ## Support
 
