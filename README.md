@@ -107,9 +107,9 @@ Comprehensive skills for building AI-powered Ruby applications:
 
 ## For Contributors
 
-### Using Git Worktrees
+### Using Symlinks
 
-Worktrees allow you to maintain a local copy for testing while contributing to the main repository.
+Symlinks allow you to develop in a central location while your agent uses the skills from `~/.agents/skills/`.
 
 #### Setup
 
@@ -118,28 +118,19 @@ Worktrees allow you to maintain a local copy for testing while contributing to t
 git clone https://github.com/yourusername/skills.git ~/Code/kaka/skills
 cd ~/Code/kaka/skills
 
-# 2. Create worktrees for testing with your agent
-# RubyLLM skills worktree
-git worktree add -b local-rubyllm ~/.agents/skills/rubyllm master
+# 2. Create symlinks for testing with your agent
+# RubyLLM skills symlink
+ln -s ~/Code/kaka/skills/rubyllm ~/.agents/skills/rubyllm
 
-# Core skills worktree (optional - if you want to test these too)
-git worktree add -b local-core ~/.agents/skills/continuous-development master
-git worktree add -b local-core2 ~/.agents/skills/continuous-improvement master
-git worktree add -b local-core3 ~/.agents/skills/git-workflow master
-
-# 3. Keep main repo for development, worktrees for testing
-# ~/Code/kaka/skills/                    <- Development (master branch)
-# ~/.agents/skills/rubyllm/              <- Testing RubyLLM skills (local-rubyllm branch)
-# ~/.agents/skills/continuous-development/ <- Testing core skills (local-core branch)
+# Core skills symlinks (optional - if you want to test these too)
+ln -s ~/Code/kaka/skills/continuous-development ~/.agents/skills/continuous-development
+ln -s ~/Code/kaka/skills/continuous-improvement ~/.agents/skills/continuous-improvement
+ln -s ~/Code/kaka/skills/git-workflow ~/.agents/skills/git-workflow
 ```
 
-**Simpler approach for core skills:**
-
+**Note:** Remove any existing directories first:
 ```bash
-# Just copy core skills directly (they don't change often)
-cp -r ~/Code/kaka/skills/continuous-development ~/.agents/skills/
-cp -r ~/Code/kaka/skills/continuous-improvement ~/.agents/skills/
-cp -r ~/Code/kaka/skills/git-workflow ~/.agents/skills/
+rm -rf ~/.agents/skills/rubyllm  # Only if it exists as a directory
 ```
 
 #### Workflow
@@ -149,16 +140,13 @@ cp -r ~/Code/kaka/skills/git-workflow ~/.agents/skills/
 cd ~/Code/kaka/skills/rubyllm
 vim tools/SKILL.md
 
-# Test with your agent (worktree has the changes)
-# Your agent uses ~/.agents/skills/rubyllm/
+# Test with your agent (symlink points to the same files)
+# Your agent uses ~/.agents/skills/rubyllm/ (which is ~/Code/kaka/skills/rubyllm)
 
 # When ready, commit in development directory
 cd ~/Code/kaka/skills
 git add rubyllm/tools/SKILL.md
 git commit -m "Improve tools documentation"
-
-# Sync to worktree for more testing
-git worktree list  # Verify worktree is up to date
 
 # Push to your fork
 git push origin master
@@ -166,50 +154,24 @@ git push origin master
 # Open a pull request on GitHub
 ```
 
-#### Merging Test Branch Back to Master
+### Why Symlinks?
 
-```bash
-# After testing in worktree, merge changes back
-cd ~/Code/kaka/skills
-git checkout master
-git merge local-testing
-git push origin master
-```
-
-#### Worktree Commands
-
-```bash
-# List all worktrees
-git worktree list
-
-# Add a worktree
-git worktree add <path> <branch>
-
-# Remove a worktree
-git worktree remove <path>
-
-# Clean up stale worktrees
-git worktree prune
-```
-
-### Why Worktrees?
-
-- **True separation**: Development and testing environments are independent
-- **No symlinks**: Each directory is a proper git working tree
-- **Branch flexibility**: Test on separate branches without affecting main development
-- **Clean workflow**: Standard git commands work in both locations
+- **Instant sync**: Changes are immediately available to your agent
+- **Single source of truth**: No need to sync between worktrees
+- **Simple workflow**: Edit once, test immediately
 - **Agent compatibility**: Works naturally with agent systems that expect skills in `~/.agents/skills/`
+- **No git complexity**: No worktree branches to manage
 
 ### Contribution Guidelines
 
 1. **Fork** the repository on GitHub
 2. **Clone** your fork locally
-3. **Create a worktree** for testing:
+3. **Create symlinks** for testing:
    ```bash
-   git worktree add -b testing ~/.agents/skills/rubyllm master
+   ln -s ~/Code/kaka/skills/rubyllm ~/.agents/skills/rubyllm
    ```
 4. **Make changes** in your development directory
-5. **Test** with your agent using the worktree
+5. **Test** with your agent (changes are instant via symlink)
 6. **Commit** with clear messages:
    ```bash
    git add .
@@ -243,12 +205,11 @@ git worktree prune
     ├── rails/
     └── ...
 
-~/.agents/skills/                # Agent's skill directory (worktrees or copies)
-├── continuous-development/       # Worktree or copy
-├── continuous-improvement/       # Worktree or copy
-├── git-workflow/                 # Worktree or copy
-└── rubyllm/                      # Worktree for RubyLLM skills
-    ├── .git                       # Worktree git file
+~/.agents/skills/                # Agent's skill directory (symlinks)
+├── continuous-development/       # Symlink to ~/Code/kaka/skills/continuous-development
+├── continuous-improvement/       # Symlink to ~/Code/kaka/skills/continuous-improvement
+├── git-workflow/                 # Symlink to ~/Code/kaka/skills/git-workflow
+└── rubyllm/                      # Symlink to ~/Code/kaka/skills/rubyllm
     ├── SKILL.md
     ├── tools/
     ├── agents/
@@ -272,10 +233,8 @@ git pull origin master
 cd ~/Code/kaka/skills
 git pull origin master
 
-# Worktree automatically stays in sync
-# Or manually update:
-cd ~/.agents/skills/rubyllm
-git pull
+# Symlinks automatically point to updated files
+# No sync needed - your agent sees changes immediately
 ```
 
 ## Adding New Skills
@@ -305,7 +264,7 @@ When adding a new skill:
 
 3. **Update README.md** to include the new skill in the table
 
-4. **Test locally** using your worktree
+4. **Test locally** using your symlink (changes are instant)
 
 5. **Commit and push**:
    ```bash
